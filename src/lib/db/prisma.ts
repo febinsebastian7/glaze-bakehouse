@@ -42,11 +42,11 @@ function createPrismaClient() {
 }
 
 /**
- * Get the Prisma client only when database functionality is actually used.
- * This prevents Prisma from being initialized during Next.js build-time
- * module evaluation.
+ * Creates the Prisma client only when it is actually used.
+ * This prevents Prisma from connecting/initializing during
+ * Next.js build-time module evaluation.
  */
-export function getPrisma() {
+function getPrismaClient() {
   if (!databaseConfigured) {
     throw new Error("DATABASE_URL is not configured.");
   }
@@ -57,3 +57,22 @@ export function getPrisma() {
 
   return globalForPrisma.prisma;
 }
+
+/**
+ * Lazy Prisma proxy.
+ *
+ * Existing code can continue using:
+ *   prisma.product.findMany()
+ *   prisma.order.findUnique()
+ *   prisma.$transaction()
+ *
+ * Prisma itself is only initialized when one of those properties
+ * is accessed at runtime.
+ */
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, property) {
+    const client = getPrismaClient();
+
+    return Reflect.get(client, property);
+  },
+});
