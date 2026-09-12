@@ -1,0 +1,231 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductCategory {
+  CAKE
+  DESSERT
+}
+
+enum ProductAvailability {
+  AVAILABLE
+  SOLD_OUT
+  HIDDEN
+}
+
+enum FulfilmentType {
+  DELIVERY
+  PICKUP
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  RAZORPAY
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  ORDER_CONFIRMED
+  PREPARING
+  BAKING
+  PACKED
+  OUT_FOR_DELIVERY
+  READY_FOR_PICKUP
+  DELIVERED
+  CANCELLED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CustomCakeStatus {
+  NEW
+  REVIEWING
+  QUOTED
+  CONFIRMED
+  DECLINED
+  COMPLETED
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  firebaseUid        String?             @unique
+  name               String?
+  email              String?             @unique
+  phone              String?             @unique
+  passwordHash       String?
+  role               String              @default("CUSTOMER")
+  imageUrl           String?
+  addresses          Address[]
+  orders             Order[]
+  reviews            Review[]
+  customCakeRequests CustomCakeRequest[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Address {
+  id                   String   @id @default(cuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label                String?
+  recipientName        String?
+  phone                String?
+  addressLine          String
+  area                 String
+  pincode              String
+  deliveryInstructions String?
+  latitude             Float?
+  longitude            Float?
+  isDefault            Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Flavour {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  isActive  Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id                   String              @id @default(cuid())
+  slug                 String              @unique
+  name                 String
+  description          String
+  price                Int
+  category             ProductCategory
+  flavourId            String?
+  flavour              Flavour?            @relation(fields: [flavourId], references: [id], onDelete: SetNull)
+  primaryImageUrl      String?
+  primaryImagePublicId String?
+  availability         ProductAvailability @default(AVAILABLE)
+  featured             Boolean             @default(false)
+  freshToday           Boolean             @default(false)
+  displayOrder         Int                 @default(0)
+  preparationTime      String?
+  baseSize             String?
+  orderItems           OrderItem[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+}
+
+model Order {
+  id                   String         @id @default(cuid())
+  orderNumber          String         @unique
+  trackingToken        String         @unique @default(cuid())
+  userId               String?
+  user                 User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName         String
+  whatsapp             String
+  email                String?
+  fulfilment           FulfilmentType
+  addressLine          String?
+  area                 String?
+  pincode              String?
+  deliveryInstructions String?
+  latitude             Float?
+  longitude            Float?
+  deliveryDate         DateTime?
+  deliveryTime         String?
+  specialNotes         String?
+  subtotal             Int
+  deliveryCharge       Int
+  total                Int
+  status               OrderStatus    @default(PENDING_PAYMENT)
+  paymentStatus        PaymentStatus  @default(PENDING)
+  items                OrderItem[]
+  payment              Payment?
+  review               Review?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+}
+
+model OrderItem {
+  id              String   @id @default(cuid())
+  orderId         String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId       String?
+  product         Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName     String
+  productImageUrl String?
+  selectedOptions Json?
+  unitPrice       Int
+  quantity        Int
+  createdAt       DateTime @default(now())
+}
+
+model Payment {
+  id                  String          @id @default(cuid())
+  orderId             String          @unique
+  order               Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider            PaymentProvider
+  providerOrderId     String?         @unique
+  providerPaymentId   String?         @unique
+  signatureVerifiedAt DateTime?
+  webhookVerifiedAt   DateTime?
+  status              PaymentStatus   @default(PENDING)
+  rawPayload          Json?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+}
+
+model Review {
+  id                    String       @id @default(cuid())
+  orderId               String?      @unique
+  order                 Order?       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId                String?
+  user                  User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  secureToken           String       @unique
+  customerName          String
+  displayName           String?
+  rating                Int
+  originalText          String
+  cleanedText           String?
+  photoUrl              String?
+  consentToDisplayPhoto Boolean      @default(false)
+  cleanupProvider       String?
+  cleanupCompletedAt    DateTime?
+  status                ReviewStatus @default(PENDING)
+  featured              Boolean      @default(false)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+}
+
+model CustomCakeRequest {
+  id                     String           @id @default(cuid())
+  userId                 String?
+  user                   User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name                   String
+  phone                  String
+  email                  String?
+  celebration            String?
+  preferredDate          DateTime?
+  cakeSize               String?
+  flavour                String?
+  theme                  String?
+  referenceImageUrl      String?
+  messageOnCake          String?
+  budget                 Int?
+  additionalRequirements String?
+  status                 CustomCakeStatus @default(NEW)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+}

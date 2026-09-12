@@ -1,0 +1,5 @@
+import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/navbar/Navbar";
+import PageIntro from "@/components/storefront/PageIntro";
+
+export default function ContactPage() { return <><Navbar /><main><PageIntro eyebrow="Contact" title={<>Let’s make something <span className="font-script text-[var(--caramel)]">lovely.</span></>}>For an order, use the collection or custom-cake request. Direct contact details will appear here once the bakery confirms the preferred WhatsApp, email and social channels.</PageIntro><section className="container-glaze grid gap-4 pb-16 md:grid-cols-3">{[["WhatsApp", "To be connected"], ["Email", "To be confirmed"], ["Social", "To be connected"]].map(([label, value]) => <div key={label} className="rounded-[1.5rem] bg-[var(--cream-light)] p-7"><p className="glaze-eyebrow text-[var(--caramel)]">{label}</p><p className="mt-5 font-display text-3xl">{value}</p><p className="mt-3 text-sm leading-6 text-[var(--cocoa)]/60">The bakery has not provided public contact details for this project yet.</p></div>)}</section></main><Footer /></> }

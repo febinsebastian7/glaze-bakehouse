@@ -1,0 +1,263 @@
+@import "tailwindcss";
+
+:root {
+  --cocoa: #4a2e1c;
+  --vanilla: #e9dcc8;
+  --periwinkle: #8ba5c2;
+  --honey: #d1b181;
+  --caramel: #c17b34;
+  --peach: #ebc79a;
+  --sage: #b6cfe1;
+  --charcoal: #3f4a56;
+
+  --cream-light: #f7efe5;
+  --cream-white: #fbf6ef;
+
+  --background: var(--vanilla);
+  --foreground: var(--cocoa);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--vanilla);
+  color: var(--cocoa);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--caramel);
+  color: white;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+}
+
+.font-script {
+  font-family: var(--font-script), cursive;
+}
+
+.container-glaze {
+  width: min(calc(100% - 32px), 1320px);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .container-glaze {
+    width: min(calc(100% - 64px), 1320px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-glaze {
+    width: min(calc(100% - 96px), 1320px);
+  }
+}
+
+.glaze-primary-button {
+  background: var(--caramel);
+  color: white;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+.glaze-primary-button:hover {
+  background: #a9672c;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(74, 46, 28, 0.14);
+}
+
+.glaze-outline-button {
+  border: 1px solid rgba(74, 46, 28, 0.3);
+  background: transparent;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    transform 200ms ease;
+}
+
+.glaze-outline-button:hover {
+  background: var(--cocoa);
+  color: var(--vanilla);
+  transform: translateY(-2px);
+}
+
+.glaze-card {
+  border: 1px solid rgba(74, 46, 28, 0.1);
+  background: var(--cream-light);
+}
+
+.glaze-line {
+  height: 1px;
+  background: rgba(74, 46, 28, 0.18);
+}
+
+.glaze-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.glaze-section-title {
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+}
+
+.glaze-organic {
+  border-radius: 50% 45% 55% 40%;
+}
+
+.glaze-soft-shadow {
+  box-shadow: 0 20px 60px rgba(74, 46, 28, 0.08);
+}
+
+.glaze-field {
+  width: 100%;
+  border: 1px solid rgba(74, 46, 28, 0.16);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--cocoa);
+  font: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  padding: 0.7rem 0.8rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.glaze-field:focus {
+  border-color: var(--caramel);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(193, 123, 52, 0.12);
+}
+
+.glaze-field::placeholder { color: rgba(74, 46, 28, 0.4); }
+
+/* This selector intentionally outranks .glaze-field's shorthand padding. */
+.glaze-field.glaze-search-field {
+  padding-left: 2.75rem;
+}
+
+/* Select controls reserve space for their intentional, non-interactive icons. */
+.glaze-field.glaze-select-with-leading-icon {
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
+}
+
+.glaze-field.glaze-select-with-trailing-icon {
+  padding-right: 2.75rem;
+}
+
+.glaze-label {
+  display: block;
+  margin-bottom: 0.38rem;
+  color: rgba(74, 46, 28, 0.6);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.glaze-check {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid rgba(74, 46, 28, 0.12);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.48);
+  padding: 0.65rem 0.75rem;
+  color: rgba(74, 46, 28, 0.72);
+  font-size: 0.7rem;
+}
+
+.glaze-check input { accent-color: var(--caramel); }
+
+.admin-action {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(74, 46, 28, 0.14);
+  border-radius: 999px;
+  background: transparent;
+  padding: 0 0.7rem;
+  color: rgba(74, 46, 28, 0.72);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.admin-action:hover { border-color: var(--caramel); color: var(--caramel); }
+
+/* ============================================================
+   GLAZE PRODUCT CAROUSEL
+============================================================ */
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Prevent horizontal movement from affecting
+ * the entire page.
+ */
+.glaze-product-carousel {
+  overscroll-behavior-x: contain;
+}
+
+/*
+ * Product cards snap into the center.
+ */
+.glaze-product-carousel > * {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+/*
+ * Prevent accidental selection while swiping.
+ */
+.glaze-product-carousel {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/*
+ * Touch scrolling.
+ */
+.glaze-product-carousel {
+  -webkit-overflow-scrolling: touch;
+}

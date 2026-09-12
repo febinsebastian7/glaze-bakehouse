@@ -1,0 +1,7 @@
+import { MapPin, Store, Truck } from "lucide-react";
+
+import AdminShell from "@/components/admin/AdminShell";
+
+export default function AdminSettingsPage() {
+  return <AdminShell><div className="rounded-[1.75rem] bg-[var(--cream-white)] p-5 md:p-7"><p className="glaze-eyebrow text-[var(--caramel)]">Bakehouse settings</p><h1 className="mt-2 font-display text-4xl md:text-5xl">The practical details.</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--cocoa)]/60">These settings need the production database before they can be saved and trusted by checkout calculations.</p><div className="mt-7 grid gap-4 md:grid-cols-3">{[[Store, "Business information", "Public contact details, collection address and bakery hours"], [Truck, "Delivery settings", "Service areas, delivery fees, slots and pickup rules"], [MapPin, "Location provider", "Google Maps or another mapping provider for address lookup and delivery coordinates"]].map(([Icon, title, detail]) => { const IconComponent = Icon as typeof Store; return <article key={String(title)} className="rounded-2xl border border-[var(--cocoa)]/10 p-5"><IconComponent size={18} className="text-[var(--caramel)]" /><h2 className="mt-5 font-display text-2xl">{String(title)}</h2><p className="mt-3 text-sm leading-6 text-[var(--cocoa)]/60">{String(detail)}</p><span className="mt-5 inline-block text-[8px] font-semibold uppercase tracking-[.12em] text-[var(--cocoa)]/45">Database connection required</span></article> })}</div></div></AdminShell>;
+}
